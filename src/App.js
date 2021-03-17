@@ -6,17 +6,29 @@ import Word from "./components/Word";
 import Notification from "./components/Notification";
 import Popup from "./components/Popup";
 import "./App.css";
-import {showNotification as show} from './helpers/helpers'
+import {showNotification as show, getWordsFromApi} from './helpers/helpers'
 
-const words = ["police", "ananas", "carrot", "bike", "sport", "application"];
-let selectedWord = words[Math.floor(Math.random() * words.length)];
 
 function App() {
   const [playable, setPlayable] = useState(true);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setshowNotification] = useState(false);
-
+  const [words, setWords] = useState(["police", "ananas", "carrot", "bike", "sport", "application"])
+  const [selectedWord, setSelectedWord] = useState(words[Math.floor(Math.random() * words.length)]);
+  
+  useEffect(() => {
+  getWordsFromApi()
+  .then((data) => {
+    setWords(data)
+    setSelectedWord(words[Math.floor(Math.random() * words.length)])
+  })
+  .catch((err) => {
+    console.log("api-error " + err);
+  });
+  }, []);
+  
+  
   useEffect(() => {
     const handleKeyDown = (event) => {
       const { key, keyCode } = event;
@@ -47,7 +59,7 @@ function App() {
     setCorrectLetters([]);
     setWrongLetters([]);
 
-    selectedWord = words[Math.floor(Math.random() * words.length)]
+    setSelectedWord (words[Math.floor(Math.random() * words.length)])
   }
 
   return (

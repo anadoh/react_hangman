@@ -19,3 +19,14 @@ export function checkWin (correct, wrong, word) {
     }
     return status;
 }   
+
+export async function getWordsFromApi() {
+    const response = await fetch(
+      "https://random-word-api.herokuapp.com/word?number=10"
+    );
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(response);
+    }
+  }
